@@ -1,5 +1,6 @@
 package idv.chauyan.debugger
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -19,9 +20,28 @@ class MainActivity : AppCompatActivity() {
 
         receiver = Debugger(this) { intent ->
             intent?.let {
-                println(it.getStringExtra("testMsg"))
-                val message = it.getStringExtra("testMsg")
-                debugTextView?.text = message
+
+                // update text size
+                it.getStringExtra("textSize")?.let { size ->
+                    debugTextView?.textSize = size.toFloat()
+                }
+
+                // update text color
+                it.getStringExtra("textColor")?.let { color ->
+                    val (r, g, b) = color.split(",").map(String::toInt)
+                    val realColor = Color.argb(255, r, g, b)
+                    debugTextView?.setTextColor(realColor)
+                }
+
+                // update message
+                it.getStringExtra("testMsg")?.let { message ->
+                    debugTextView?.text = message
+                }
+
+                // update rotation
+                it.getStringExtra("rotation")?.let { rotation ->
+                    debugTextView?.rotation = rotation.toFloat()
+                }
             }
         }
     }
